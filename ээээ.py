@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XYESSEARCH</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .sidebar h1 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #3498db;
+        }
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .sidebar a:hover {
+            color: #3498db;
+        }
+        .main-content {
+            margin-left: 240px;
+            padding: 20px;
+        }
+        .search-container {
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .search-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .search-box {
+            display: flex;
+            margin-top: 20px;
+        }
+        #phone-input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+        #search-btn {
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #search-btn:hover {
+            background-color: #2980b9;
+        }
+        .results {
+            margin-top: 30px;
+            text-align: left;
+            padding: 20px;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>XYESSEARCH</h1>
+        <a href="https://t.me/XYESSEARCH" target="_blank">Telegram Channel - @XYESSEARCH</a>
+        <a href="https://t.me/bloodOdessa" target="_blank">МОЙ ЛС @bloodOdessa</a>
+    </div>
+
+    <div class="main-content">
+        <div class="search-container">
+            <div class="search-title">Введите Номер К примеру +7999999</div>
+            <div class="search-box">
+                <input type="text" id="phone-input" placeholder="Введите номер телефона...">
+                <button id="search-btn">Search</button>
+            </div>
+            <div id="results" class="results">
+                <!-- Здесь будут отображаться результаты поиска -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const phoneNumber = document.getElementById('phone-input').value.trim();
+            const resultsDiv = document.getElementById('results');
+            
+            if (phoneNumber) {
+                // Здесь должна быть логика поиска информации по номеру
+                // В демо-версии просто показываем пример результата
+                
+                resultsDiv.innerHTML = `
+                    <h3>Результаты поиска для: ${phoneNumber}</h3>
+                    <p>Информация по номеру будет отображаться здесь.</p>
+                    <p>В реальной версии здесь будет подключение к боту для поиска информации.</p>
+                `;
+                resultsDiv.style.display = 'block';
+            } else {
+                alert('Пожалуйста, введите номер телефона');
+            }
+        });
+    </script>
+</body>
+</html>
