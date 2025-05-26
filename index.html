@@ -3,126 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XYESSEARCH</title>
+    <title>XYESSEARCH - Поиск по номеру телефона</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            background-color: #f0f2f5;
             color: #333;
+            display: flex;
+            min-height: 100vh;
         }
         .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 200px;
-            height: 100%;
-            background-color: #2c3e50;
+            width: 250px;
+            background-color: #1a1a2e;
             color: white;
-            padding: 20px;
+            padding: 25px;
             box-sizing: border-box;
+            position: fixed;
+            height: 100%;
         }
         .sidebar h1 {
+            color: #4cc9f0;
             font-size: 24px;
             margin-bottom: 30px;
-            color: #3498db;
+            border-bottom: 1px solid #4cc9f0;
+            padding-bottom: 10px;
         }
-        .sidebar a {
-            color: #ecf0f1;
+        .contact-info {
+            margin-top: 40px;
+        }
+        .contact-info a {
+            color: #f8f9fa;
             text-decoration: none;
             display: block;
             margin-bottom: 15px;
-            font-size: 16px;
+            transition: color 0.3s;
         }
-        .sidebar a:hover {
-            color: #3498db;
+        .contact-info a:hover {
+            color: #4cc9f0;
         }
         .main-content {
-            margin-left: 240px;
-            padding: 20px;
+            margin-left: 300px;
+            flex-grow: 1;
+            padding: 30px;
         }
         .search-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             max-width: 800px;
-            margin: 50px auto;
-            text-align: center;
+            margin: 0 auto;
         }
         .search-title {
-            font-size: 24px;
+            font-size: 20px;
             margin-bottom: 20px;
+            color: #1a1a2e;
+            text-align: center;
         }
         .search-box {
             display: flex;
-            margin-top: 20px;
+            margin-bottom: 30px;
         }
         #phone-input {
-            flex-grow: 1;
+            flex: 1;
             padding: 12px 15px;
             font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px 0 0 4px;
+            border: 2px solid #ddd;
+            border-radius: 5px 0 0 5px;
             outline: none;
+            transition: border-color 0.3s;
+        }
+        #phone-input:focus {
+            border-color: #4cc9f0;
         }
         #search-btn {
-            padding: 12px 20px;
-            background-color: #3498db;
+            padding: 12px 25px;
+            background-color: #4361ee;
             color: white;
             border: none;
-            border-radius: 0 4px 4px 0;
+            border-radius: 0 5px 5px 0;
             cursor: pointer;
             font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
         #search-btn:hover {
-            background-color: #2980b9;
+            background-color: #3a56d4;
         }
         .results {
-            margin-top: 30px;
-            text-align: left;
-            padding: 20px;
-            background-color: white;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
             display: none;
+        }
+        .result-item {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .result-title {
+            font-weight: bold;
+            color: #4361ee;
+            margin-bottom: 5px;
+        }
+        .loading {
+            text-align: center;
+            display: none;
+            margin: 20px 0;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #4361ee;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error {
+            color: #d90429;
+            background-color: #ffd6d6;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+        .useful-links {
+            margin-top: 30px;
+        }
+        .useful-links a {
+            color: #4361ee;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .useful-links a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="sidebar">
         <h1>XYESSEARCH</h1>
-        <a href="https://t.me/XYESSEARCH" target="_blank">Telegram Channel - @XYESSEARCH</a>
-        <a href="https://t.me/bloodOdessa" target="_blank">МОЙ ЛС @bloodOdessa</a>
+        <div class="contact-info">
+            <h3>Telegram Contacts</h3>
+            <a href="https://t.me/XYESSEARCH" target="_blank">Channel - @XYESSEARCH</a>
+            <a href="https://t.me/bloodOdessa" target="_blank">МОЙ ЛС @bloodOdessa</a>
+        </div>
     </div>
 
     <div class="main-content">
         <div class="search-container">
-            <div class="search-title">Введите Номер К примеру +7999999</div>
+            <div class="search-title">Введите номер телефона, например: +79999999999</div>
             <div class="search-box">
-                <input type="text" id="phone-input" placeholder="Введите номер телефона...">
+                <input type="text" id="phone-input" placeholder="+7XXXXXXXXXX" pattern="\+[0-9]{11,15}" required>
                 <button id="search-btn">Search</button>
             </div>
-            <div id="results" class="results">
-                <!-- Здесь будут отображаться результаты поиска -->
+            
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Ищем информацию...</p>
+            </div>
+            
+            <div class="error" id="error-message"></div>
+            
+            <div class="results" id="results">
+                <!-- Результаты будут вставлены сюда -->
+            </div>
+            
+            <div class="useful-links" id="useful-links" style="display: none;">
+                <h3>Полезные ссылки:</h3>
+                <a href="https://www.instagram.com/accounts/password/reset" target="_blank">Поиск аккаунта в Instagram</a>
+                <a href="https://web.telegram.org/" target="_blank">Поиск в Telegram</a>
+                <a href="https://www.viber.com/" target="_blank">Поиск в Viber</a>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('search-btn').addEventListener('click', function() {
+        document.getElementById('search-btn').addEventListener('click', async function() {
             const phoneNumber = document.getElementById('phone-input').value.trim();
             const resultsDiv = document.getElementById('results');
+            const loadingDiv = document.querySelector('.loading');
+            const errorDiv = document.getElementById('error-message');
+            const linksDiv = document.getElementById('useful-links');
             
-            if (phoneNumber) {
-                // Здесь должна быть логика поиска информации по номеру
-                // В демо-версии просто показываем пример результата
+            // Проверка ввода
+            if (!phoneNumber) {
+                errorDiv.textContent = 'Пожалуйста, введите номер телефона';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Скрыть предыдущие результаты и ошибки
+            resultsDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
+            linksDiv.style.display = 'none';
+            
+            // Показать индикатор загрузки
+            loadingDiv.style.display = 'block';
+            
+            try {
+                // Отправка запроса на сервер
+                const response = await fetch('/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ phone: phoneNumber })
+                });
                 
-                resultsDiv.innerHTML = `
-                    <h3>Результаты поиска для: ${phoneNumber}</h3>
-                    <p>Информация по номеру будет отображаться здесь.</p>
-                    <p>В реальной версии здесь будет подключение к боту для поиска информации.</p>
-                `;
+                const data = await response.json();
+                
+                // Скрыть индикатор загрузки
+                loadingDiv.style.display = 'none';
+                
+                if (data.error) {
+                    errorDiv.textContent = data.message || 'Произошла ошибка при поиске информации';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                
+                // Отобразить результаты
+                resultsDiv.innerHTML = '';
+                
+                if (data.limit && data.limit <= 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="result-item">
+                            <div class="result-title">Лимиты исчерпаны</div>
+                            <p>К сожалению, вы израсходовали все лимиты...</p>
+                            <p>Всего лимитов: ${data.limit || 'неизвестно'}</p>
+                            <p>Обратитесь к @bloodOdessa для увеличения лимитов</p>
+                        </div>
+                    `;
+                } else {
+                    // Основная информация
+                    if (data.country) {
+                        const countryItem = document.createElement('div');
+                        countryItem.className = 'result-item';
+                        countryItem.innerHTML = `
+                            <div class="result-title">Страна</div>
+                            <p>${data.country.name || 'Неизвестно'}, ${data.country.fullname || 'Неизвестно'}</p>
+                            <p>Код страны: ${data.country.country_code3 || 'Неизвестно'}</p>
+                        `;
+                        resultsDiv.appendChild(countryItem);
+                    }
+                    
+                    // Город и оператор
+                    if (data.other) {
+                        const cityItem = document.createElement('div');
+                        cityItem.className = 'result-item';
+                        cityItem.innerHTML = `
+                            <div class="result-title">Город и оператор</div>
+                            <p>Город: ${data.other.name || 'Неизвестно'}</p>
+                            <p>Почтовый индекс: ${data.other.post || 'Неизвестно'}</p>
+                            <p>Оператор: ${data.other.oper || 'Неизвестно'}, ${data.other.oper_brand || ''}</p>
+                        `;
+                        resultsDiv.appendChild(cityItem);
+                    }
+                    
+                    // Регион
+                    if (data.region) {
+                        const regionItem = document.createElement('div');
+                        regionItem.className = 'result-item';
+                        regionItem.innerHTML = `
+                            <div class="result-title">Регион</div>
+                            <p>Регион: ${data.region.name || 'Неизвестно'}</p>
+                            <p>Автокод: ${data.region.autocod || 'Неизвестно'}</p>
+                            <p>Округ: ${data.region.okrug || 'Неизвестно'}</p>
+                        `;
+                        resultsDiv.appendChild(regionItem);
+                    }
+                    
+                    // Координаты
+                    if (data.other && (data.other.latitude || data.other.longitude)) {
+                        const coordItem = document.createElement('div');
+                        coordItem.className = 'result-item';
+                        coordItem.innerHTML = `
+                            <div class="result-title">Координаты</div>
+                            <p>Широта: ${data.other.latitude || 'Неизвестно'}</p>
+                            <p>Долгота: ${data.other.longitude || 'Неизвестно'}</p>
+                        `;
+                        resultsDiv.appendChild(coordItem);
+                    }
+                    
+                    // Показать полезные ссылки
+                    linksDiv.style.display = 'block';
+                }
+                
                 resultsDiv.style.display = 'block';
-            } else {
-                alert('Пожалуйста, введите номер телефона');
+                
+            } catch (error) {
+                console.error('Ошибка:', error);
+                loadingDiv.style.display = 'none';
+                errorDiv.textContent = 'Произошла ошибка при подключении к серверу';
+                errorDiv.style.display = 'block';
             }
         });
     </script>
