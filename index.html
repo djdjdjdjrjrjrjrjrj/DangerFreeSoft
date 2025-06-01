@@ -3,160 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XYESSEARCH - Поиск по номеру телефона</title>
+    <title>Счётчик кликов</title>
     <style>
-        /* Ваши существующие стили остаются без изменений */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f2f5;
-            color: #333;
+            background-color: white;
             display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
         }
-        .sidebar {
-            width: 250px;
-            background-color: #1a1a2e;
-            color: white;
-            padding: 25px;
-            box-sizing: border-box;
+
+        .counter {
+            font-size: 3em;
+            margin-bottom: 30px;
             position: fixed;
-            height: 100%;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        /* ... остальные стили ... */
+
+        #clickable-image {
+            max-width: 80%;
+            max-height: 70vh;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            transition: transform 0.1s;
+        }
+
+        #clickable-image:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body>
-    <!-- Ваша HTML-разметка остается без изменений -->
-    <div class="sidebar">
-        <h1>XYESSEARCH</h1>
-        <div class="contact-info">
-            <h3>Telegram Contacts</h3>
-            <a href="https://t.me/XYESSEARCH" target="_blank">Channel - @XYESSEARCH</a>
-            <a href="https://t.me/bloodOdessa" target="_blank">МОЙ ЛС @bloodOdessa</a>
-        </div>
-    </div>
-
-    <div class="main-content">
-        <div class="search-container">
-            <div class="search-title">Введите номер телефона, например: +79999999999</div>
-            <div class="search-box">
-                <input type="text" id="phone-input" placeholder="+7XXXXXXXXXX" pattern="\+[0-9]{11,15}" required>
-                <button id="search-btn">Search</button>
-            </div>
-            
-            <div class="loading">
-                <div class="spinner"></div>
-                <p>Ищем информацию...</p>
-            </div>
-            
-            <div class="error" id="error-message"></div>
-            
-            <div class="results" id="results">
-                <!-- Результаты будут вставлены сюда -->
-            </div>
-            
-            <div class="useful-links" id="useful-links" style="display: none;">
-                <h3>Полезные ссылки:</h3>
-                <a href="https://www.instagram.com/accounts/password/reset" target="_blank">Поиск аккаунта в Instagram</a>
-                <a href="https://web.telegram.org/" target="_blank">Поиск в Telegram</a>
-                <a href="https://www.viber.com/" target="_blank">Поиск в Viber</a>
-            </div>
-        </div>
-    </div>
+    <div class="counter" id="counter">0</div>
+    <img 
+        id="clickable-image" 
+        src="https://avatars.mds.yandex.net/get-shedevrum/11476535/remixed_cfbd9aa0167d11ef8c323ed3d07d3082_1558862369/orig" 
+        alt="Клик-картинка"
+        onerror="this.src='https://via.placeholder.com/600x400?text=Изображение+не+загружено'"
+    >
 
     <script>
-        document.getElementById('search-btn').addEventListener('click', async function() {
-            const phoneNumber = document.getElementById('phone-input').value.trim();
-            const resultsDiv = document.getElementById('results');
-            const loadingDiv = document.querySelector('.loading');
-            const errorDiv = document.getElementById('error-message');
-            const linksDiv = document.getElementById('useful-links');
+        let clickCount = 0;
+        const counterElement = document.getElementById('counter');
+        const image = document.getElementById('clickable-image');
+
+        image.addEventListener('click', () => {
+            clickCount++;
+            counterElement.textContent = clickCount;
             
-            // Проверка ввода
-            if (!phoneNumber) {
-                showError('Пожалуйста, введите номер телефона');
-                return;
-            }
-            
-            // Скрыть предыдущие результаты и ошибки
-            resetUI();
-            
-            // Показать индикатор загрузки
-            loadingDiv.style.display = 'block';
-            
-            try {
-                // Отправка запроса на сервер
-                const response = await fetch('http://localhost:5000/search', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ phone: phoneNumber })
-                });
-                
-                // Проверка статуса ответа
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                // Скрыть индикатор загрузки
-                loadingDiv.style.display = 'none';
-                
-                if (data.error) {
-                    showError(data.message || 'Произошла ошибка при поиске информации');
-                    return;
-                }
-                
-                // Отобразить результаты
-                displayResults(data);
-                
-                // Показать полезные ссылки
-                linksDiv.style.display = 'block';
-                
-            } catch (error) {
-                console.error('Ошибка:', error);
-                loadingDiv.style.display = 'none';
-                showError('Произошла ошибка при подключении к серверу. Проверьте подключение к интернету и попробуйте снова.');
-            }
+            // Анимация счетчика
+            counterElement.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                counterElement.style.transform = 'scale(1)';
+            }, 200);
         });
-
-        function resetUI() {
-            document.getElementById('results').style.display = 'none';
-            document.getElementById('error-message').style.display = 'none';
-            document.getElementById('useful-links').style.display = 'none';
-            document.getElementById('results').innerHTML = '';
-        }
-
-        function showError(message) {
-            const errorDiv = document.getElementById('error-message');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-        }
-
-        function displayResults(data) {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
-            
-            if (data.limit && data.limit <= 0) {
-                resultsDiv.innerHTML = `
-                    <div class="result-item">
-                        <div class="result-title">Лимиты исчерпаны</div>
-                        <p>К сожалению, вы израсходовали все лимиты...</p>
-                        <p>Всего лимитов: ${data.limit || 'неизвестно'}</p>
-                        <p>Обратитесь к @bloodOdessa для увеличения лимитов</p>
-                    </div>
-                `;
-            } else {
-                // Добавьте обработку данных как в предыдущем примере
-                // ...
-            }
-            
-            resultsDiv.style.display = 'block';
-        }
     </script>
 </body>
 </html>
